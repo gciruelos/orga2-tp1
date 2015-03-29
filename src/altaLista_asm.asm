@@ -1,10 +1,10 @@
 
 ; ESTUDIANTE
-	global estudianteCrear
-	global estudianteBorrar
-	global menorEstudiante
-	global estudianteConFormato
-	global estudianteImprimir
+;	global estudianteCrear
+;	global estudianteBorrar
+;	global menorEstudiante
+;	global estudianteConFormato
+;	global estudianteImprimir
 	
 ; ALTALISTA y NODO
 	global nodoCrear
