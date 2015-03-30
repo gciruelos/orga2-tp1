@@ -79,9 +79,12 @@ void altaListaBorrar(altaLista *l, tipoFuncionBorrarDato f){
 }
 
 void altaListaImprimir(altaLista *l, char *archivo, tipoFuncionImprimirDato f){
-  FILE * file = fopen(archivo, "w");
+  FILE * file = fopen(archivo, "a");
 
   nodo * nodoActual = l->primero;
+  if(nodoActual == NULL){
+    fprintf(file, "<vacia>\n");
+  }
   while(nodoActual != NULL){
     f(nodoActual->dato, file);
     nodoActual = nodoActual->siguiente;
@@ -108,23 +111,30 @@ float edadMedia(altaLista *l){
 }
 
 void insertarOrdenado(altaLista *l, void *dato, tipoFuncionCompararDato f){
-  nodo *nodoActual = l->primero, *nodoSiguiente;
-  while(nodoActual != NULL && f(nodoActual->siguiente->dato, dato)){
-    nodoSiguiente = nodoActual->siguiente; 
-    nodoActual = nodoSiguiente;
+  nodo *nodoActual = l->primero, *nodoAnterior;
+  while(nodoActual != NULL && !f(dato, nodoActual->dato)){
+    nodoActual = nodoActual->siguiente;
   }
+
   if(nodoActual == NULL){
     insertarAtras(l, dato);
   }
-  else{ // dato < nodoActual->siguiente->dato && nodoActual->dato < dato
-    nodoSiguiente = nodoActual->siguiente;
-
-	  nodo *nuevoNodo = nodoCrear(dato);
-    nuevoNodo->siguiente = nodoSiguiente;
-    nuevoNodo->anterior = nodoActual;
-
-    nodoActual->siguiente = nuevoNodo;
-    nodoSiguiente->anterior = nuevoNodo;
+  else{ //dato va antes de nodoActual
+    nodo * nuevo = nodoCrear(dato);
+    nuevo->siguiente = nodoActual;
+ 
+    nodoAnterior = nodoActual->anterior;
+    
+    if(nodoAnterior == NULL){//nodoActual es el primero
+      l->primero = nuevo;
+      nuevo->anterior = NULL;
+      nodoActual->anterior = nuevo;
+    }
+    else{
+      nuevo->anterior = nodoAnterior;
+      nodoAnterior->siguiente = nuevo;
+      nodoActual->anterior = nuevo;
+    }
   }
 }
 
@@ -135,13 +145,22 @@ void filtrarAltaLista( altaLista *l, tipoFuncionCompararDato f, void *datoCmp ){
     nodoSiguiente = nodoActual->siguiente; 
     nodoAnterior = nodoActual->anterior;
     
-    if(!f(nodoActual->dato, datoCmp)){//tengo que borrarlo
-      if(nodoAnterior == NULL){//es el primero
+    
+
+    if(!f(nodoActual->dato, datoCmp)){//tengo que borrarlo 
+      if(nodoAnterior == NULL && nodoSiguiente == NULL){
+        l->primero = NULL;
+        l->ultimo = NULL;
+        nodoBorrar(nodoActual, (tipoFuncionBorrarDato) estudianteBorrar);
+      }
+      else if(nodoAnterior == NULL){//es el primero
         l->primero = nodoSiguiente;
+        nodoSiguiente->anterior = NULL;
         nodoBorrar(nodoActual, (tipoFuncionBorrarDato) estudianteBorrar);
       }
       else if(nodoSiguiente == NULL){//es el ultimo
         l->ultimo = nodoAnterior;
+        nodoAnterior->siguiente = NULL;
         nodoBorrar(nodoActual, (tipoFuncionBorrarDato) estudianteBorrar);
       }
       else{
@@ -152,7 +171,6 @@ void filtrarAltaLista( altaLista *l, tipoFuncionCompararDato f, void *datoCmp ){
     }
     nodoActual = nodoSiguiente;
   }
-
 }
 
 /** Funciones auxiliares sugeridas **/

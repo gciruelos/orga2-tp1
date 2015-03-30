@@ -1,2 +1,0 @@
->>>>>>>>>>>>>>>> PROBANDO MENOR-ESTUDIANTE
->>>>>>>>>>>>>>>> PROBANDO INSERTAR-ORDENADO
