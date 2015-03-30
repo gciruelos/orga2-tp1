@@ -5,10 +5,7 @@
 
 
 
-
 /** Funciones de estudiante **/
-
-
 
 estudiante *estudianteCrear( char *nombre, char *grupo, unsigned int edad ){
   estudiante * e = malloc(sizeof(estudiante));
@@ -17,19 +14,14 @@ estudiante *estudianteCrear( char *nombre, char *grupo, unsigned int edad ){
   e->grupo = string_copiar(grupo);
   e->edad = edad;
 
-
   return e;
 }
-
 
 void estudianteBorrar( estudiante *e ){
   free(e->nombre);
   free(e->grupo);
   free(e);
 }
-
-
-
 
 bool menorEstudiante( estudiante *e1, estudiante *e2 ){
   if(string_menor(e1->nombre, e2->nombre))
@@ -50,7 +42,81 @@ void estudianteImprimir( estudiante *e, FILE *file ){
   fprintf(file, "%s\n\t%s\n\t%d\n", e->nombre, e->grupo, e->edad);
 }
 
-/** Funciones auxiliares sugeridas**/
+
+/** Funciones de altaLista y nodo **/
+nodo *nodoCrear(void *dato){
+  nodo * n = malloc(sizeof(nodo));
+
+  n->anterior = NULL;
+  n->siguiente = NULL;
+  n->dato = dato;
+
+  return n;
+}
+
+void nodoBorrar(nodo *n, tipoFuncionBorrarDato f){
+  f(n->dato);
+  free(n);
+}
+
+altaLista *altaListaCrear(void){
+ altaLista * lista = malloc(sizeof(altaLista));
+ lista->primero = NULL;
+ lista->ultimo  = NULL;
+ 
+ return lista;
+}
+
+void altaListaBorrar(altaLista *l, tipoFuncionBorrarDato f){
+  nodo *nodoActual = l->primero, *nodoSiguiente;
+  
+  while(nodoActual != NULL){
+    nodoSiguiente = nodoActual->siguiente;
+    nodoBorrar(nodoActual, f);
+    nodoActual = nodoSiguiente;
+  }
+  free(l);
+}
+
+void altaListaImprimir(altaLista *l, char *archivo, tipoFuncionImprimirDato f){
+  FILE * file = fopen(archivo, "w");
+
+  nodo * nodoActual = l->primero;
+  while(nodoActual != NULL){
+    f(nodoActual->dato, file);
+    nodoActual = nodoActual->siguiente;
+  }
+  fclose(file);
+}
+
+
+
+
+/** Funciones Avanzadas **/
+float edadMedia(altaLista *l){
+
+
+  int suma = 0;
+  int largo = 0;
+
+  nodo * nodoActual = l->primero;
+  while(nodoActual != NULL){
+    suma += ((estudiante *) (nodoActual->dato))->edad;
+    largo++;
+    nodoActual = nodoActual->siguiente;
+  }
+
+  return ((float) suma)/largo;
+}
+
+  
+
+
+
+
+
+
+/** Funciones auxiliares sugeridas **/
 unsigned char string_longitud(char *s){
   int i = 0, l = 0;
 

@@ -7,16 +7,16 @@
 ;	global estudianteImprimir
 	
 ; ALTALISTA y NODO
-	global nodoCrear
-	global nodoBorrar
-	global altaListaCrear
-	global altaListaBorrar
-	global altaListaImprimir
+;	global nodoCrear
+;	global nodoBorrar
+;	global altaListaCrear
+;	global altaListaBorrar
+;	global altaListaImprimir
 
 ; AVANZADAS
-	global edadMedia
-	global insertarOrdenado
-	global filtrarAltaLista
+;	global edadMedia
+;	global insertarOrdenado
+;	global filtrarAltaLista
 
 ; YA IMPLEMENTADAS EN C
 	extern string_iguales
