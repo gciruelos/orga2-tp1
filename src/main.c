@@ -53,10 +53,26 @@ int main (void){
   //Crear una altaLista nueva, agregarle un estudiante, imprimirla y borrarla
   miAltaLista = altaListaCrear();
   insertarAtras(miAltaLista, estudianteCrear("leila", "entrania", 21));
+  insertarAtras(miAltaLista, estudianteCrear("Gonzalo", "miGrupo", 20));
+  insertarAtras(miAltaLista, estudianteCrear("viejo", "grupo2", 50));
   altaListaImprimir(miAltaLista, "salida.txt", (tipoFuncionImprimirDato) estudianteImprimir);
+  printf("Promedio edad: %f\n", edadMedia(miAltaLista));
   altaListaBorrar(miAltaLista, (tipoFuncionBorrarDato) estudianteBorrar);
 
-
+  //Insertar Ordenado
+  miAltaLista = altaListaCrear();
+  insertarAtras(miAltaLista, estudianteCrear("leila", "entrania", 21));
+  insertarAtras(miAltaLista, estudianteCrear("Gonzalo", "miGrupo", 20));
+  insertarAtras(miAltaLista, estudianteCrear("viejo", "grupo2", 50));
+  insertarOrdenado(miAltaLista, estudianteCrear("Gonzalo", "miGrupo", 21),  (tipoFuncionCompararDato) menorEstudiante);
+  altaListaImprimir(miAltaLista, "salida.txt", (tipoFuncionImprimirDato) estudianteImprimir);
+  altaListaBorrar(miAltaLista, (tipoFuncionBorrarDato) estudianteBorrar);
+  
+  //Insertar Ordenado Lista Vacia
+  miAltaLista = altaListaCrear();
+  insertarOrdenado(miAltaLista, estudianteCrear("Gonzalo", "miGrupo", 20),  (tipoFuncionCompararDato) menorEstudiante);
+  altaListaImprimir(miAltaLista, "salida.txt", (tipoFuncionImprimirDato) estudianteImprimir);
+  altaListaBorrar(miAltaLista, (tipoFuncionBorrarDato) estudianteBorrar);
 
   // COMPLETAR AQUI EL CODIGO
 	return 0;

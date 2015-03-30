@@ -94,8 +94,6 @@ void altaListaImprimir(altaLista *l, char *archivo, tipoFuncionImprimirDato f){
 
 /** Funciones Avanzadas **/
 float edadMedia(altaLista *l){
-
-
   int suma = 0;
   int largo = 0;
 
@@ -109,12 +107,53 @@ float edadMedia(altaLista *l){
   return ((float) suma)/largo;
 }
 
-  
+void insertarOrdenado(altaLista *l, void *dato, tipoFuncionCompararDato f){
+  nodo *nodoActual = l->primero, *nodoSiguiente;
+  while(nodoActual != NULL && f(nodoActual->siguiente->dato, dato)){
+    nodoSiguiente = nodoActual->siguiente; 
+    nodoActual = nodoSiguiente;
+  }
+  if(nodoActual == NULL){
+    insertarAtras(l, dato);
+  }
+  else{ // dato < nodoActual->siguiente->dato && nodoActual->dato < dato
+    nodoSiguiente = nodoActual->siguiente;
+
+	  nodo *nuevoNodo = nodoCrear(dato);
+    nuevoNodo->siguiente = nodoSiguiente;
+    nuevoNodo->anterior = nodoActual;
+
+    nodoActual->siguiente = nuevoNodo;
+    nodoSiguiente->anterior = nuevoNodo;
+  }
+}
 
 
+void filtrarAltaLista( altaLista *l, tipoFuncionCompararDato f, void *datoCmp ){
+  nodo *nodoActual = l->primero, *nodoSiguiente, *nodoAnterior;
+  while(nodoActual != NULL){
+    nodoSiguiente = nodoActual->siguiente; 
+    nodoAnterior = nodoActual->anterior;
+    
+    if(!f(nodoActual->dato, datoCmp)){//tengo que borrarlo
+      if(nodoAnterior == NULL){//es el primero
+        l->primero = nodoSiguiente;
+        nodoBorrar(nodoActual, (tipoFuncionBorrarDato) estudianteBorrar);
+      }
+      else if(nodoSiguiente == NULL){//es el ultimo
+        l->ultimo = nodoAnterior;
+        nodoBorrar(nodoActual, (tipoFuncionBorrarDato) estudianteBorrar);
+      }
+      else{
+        nodoAnterior->siguiente = nodoSiguiente;
+        nodoSiguiente->anterior = nodoAnterior;
+        nodoBorrar(nodoActual, (tipoFuncionBorrarDato) estudianteBorrar);
+      }
+    }
+    nodoActual = nodoSiguiente;
+  }
 
-
-
+}
 
 /** Funciones auxiliares sugeridas **/
 unsigned char string_longitud(char *s){
