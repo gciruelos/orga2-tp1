@@ -2,9 +2,6 @@
 #include "stdlib.h"
 
 
-
-
-
 /** Funciones de estudiante **/
 
 estudiante *estudianteCrear( char *nombre, char *grupo, unsigned int edad ){
@@ -174,6 +171,7 @@ void filtrarAltaLista( altaLista *l, tipoFuncionCompararDato f, void *datoCmp ){
 }
 
 /** Funciones auxiliares sugeridas **/
+/*
 unsigned char string_longitud(char *s){
   int i = 0, l = 0;
 
@@ -209,7 +207,7 @@ bool string_menor(char *s1, char *s2){
   if(s1[i] < s2[i]) return true;
   else return false;
 }
-
+*/
 
 /** Funciones Auxiliares ya implementadas en C **/
 

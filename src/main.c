@@ -19,13 +19,16 @@ void f( char* s ){s[0] = s[0];}
 void g( char *s ){ if( s[0] != 0 ) s[0] = 'X'; }
 
 int main (void){
-/*  //string_copiar, string_longitud, string_menor
+  //string_copiar, string_longitud, string_menor
   char h1[] = "Paul Simon";
   char * h2 = string_copiar(h1);
   h1[2] = 'o';
   printf("%s ~ %s\n", h1, h2);
   printf("Longitud: %d\n", string_longitud(h1));
   printf(string_menor(h1, h2)? "%s < %s\n" : "%s >= %s\n", h1, h2);
+  char x1[]="Agustina";
+  char x2[]="Agustina";
+  printf(string_menor(x1, x2)? "%s < %s\n" : "%s >= %s\n", x1, x2); 
   //estudianteCrear
   estudiante * miEstudiante1 = estudianteCrear(h2, "Simon & Garfunkel", 57);
   free(h2);
@@ -86,7 +89,7 @@ int main (void){
   filtrarAltaLista( miAltaLista, (tipoFuncionCompararDato)menorEstudiante, Laura );
   altaListaBorrar(miAltaLista, (tipoFuncionBorrarDato) estudianteBorrar);
   estudianteBorrar(Laura);
-*/
+ /* 
 
   //FIGURA 4
   altaLista * l = altaListaCrear();
@@ -106,7 +109,7 @@ int main (void){
   estudianteBorrar( Laura );
   altaListaBorrar(l, (tipoFuncionBorrarDato) estudianteBorrar);
   
-  
+ */ 
   
   
   return 0;
