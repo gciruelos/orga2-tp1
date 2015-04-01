@@ -107,7 +107,7 @@ float edadMedia(altaLista *l){
 
   return ((float) suma)/largo;
 }
-
+/*
 void insertarOrdenado(altaLista *l, void *dato, tipoFuncionCompararDato f){
   nodo *nodoActual = l->primero, *nodoAnterior;
   while(nodoActual != NULL && !f(dato, nodoActual->dato)){
@@ -135,7 +135,7 @@ void insertarOrdenado(altaLista *l, void *dato, tipoFuncionCompararDato f){
     }
   }
 }
-
+*/
 
 void filtrarAltaLista( altaLista *l, tipoFuncionCompararDato f, void *datoCmp ){
   nodo *nodoActual = l->primero, *nodoSiguiente, *nodoAnterior;

@@ -15,7 +15,7 @@
 
 ; AVANZADAS
 ;	global edadMedia
-;	global insertarOrdenado
+	global insertarOrdenado
 ;	global filtrarAltaLista
 
 ; AUXILIARES SUGERIDAS
@@ -368,8 +368,69 @@ section .text
 		; COMPLETAR AQUI EL CODIGO
 
 	; void insertarOrdenado( altaLista *l, void *dato, tipoFuncionCompararDato f )
-	insertarOrdenado:
-		; COMPLETAR AQUI EL CODIGO
+	insertarOrdenado:		
+		push rbp
+    mov rbp, rsp
+    push rbx
+    push r12
+    push r13
+    push r14                   
+    push r15 
+    add rsp, 8                 ;; FIN INICIALIZACION
+    
+    mov r12, rsi               ; r12 <- dato
+    mov r13, rdx               ; r13 <- f
+    mov r14, NULL              ; r14 <- nodoAnterior
+    mov r15, rdi               ; r15 <- l
+    mov rbx, [r15 + OFFSET_PRIMERO] ; rbx <- nodoActual 
+ 
+  insertarOrdenado_loop:
+    cmp rbx, 0
+    je insertarOrdenado_loop_fin
+    mov rdi, r12
+    mov rsi, [rbx + OFFSET_DATO]
+    call r13                   ; f(dato, nodoActual->dato)
+    cmp rax, 0
+    jne insertarOrdenado_loop_fin
+    mov rbx, [rbx + OFFSET_SIGUIENTE] ; nodoActual <- nodoActual->siguiente
+    jmp insertarOrdenado_loop
+
+  insertarOrdenado_loop_fin:
+    cmp rbx, NULL                 
+    jne insertarOrdenado_en_el_medio ; no va al final de la lista
+    mov rdi, r15
+    mov rsi, r12
+    call insertarAtras         ; insertarAtras(l, dato)
+    jmp insertarOrdenado_fin
+  
+  insertarOrdenado_en_el_medio: ; dato va antes de nodoActual
+    mov rdi, r12
+    call nodoCrear             ; nodoCrear(dato)
+    mov [rax + OFFSET_SIGUIENTE], rbx ; nuevo->siguiente = nodoActual
+
+    mov r14, [rbx + OFFSET_ANTERIOR] ; nodoAnterior <- nodoActual->anterior
+    cmp r14, 0
+    jne insertarOrdenado_en_el_primero
+    mov [r15 + OFFSET_PRIMERO], rax ; l->primero <- nuevo
+    mov qword [rax + OFFSET_ANTERIOR], NULL ; nuevo->anterior = NULL
+    mov [rbx + OFFSET_ANTERIOR], rax ; nodoActual->anterior = nuevo 
+    jmp insertarOrdenado_fin
+
+  insertarOrdenado_en_el_primero:
+    mov [rax + OFFSET_ANTERIOR], r14 ; nuevo->anterior <- nodoAnterior
+    mov [r14 + OFFSET_SIGUIENTE], rax ; nodoAnterior->siguiente <- nuevo
+    mov [rbx + OFFSET_ANTERIOR], rax ; nodoActual->anterior <- nuevo
+    
+  insertarOrdenado_fin:
+    sub rsp, 8
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    pop rbx
+    pop rbp
+    ret
+
 
 	; void filtrarAltaLista( altaLista *l, tipoFuncionCompararDato f, void *datoCmp )
 	filtrarAltaLista:
@@ -467,6 +528,4 @@ section .text
     pop rbp
     ret
    
-
-
 
