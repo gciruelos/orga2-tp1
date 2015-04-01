@@ -7,11 +7,11 @@
 	global estudianteImprimir
 	
 ; ALTALISTA y NODO
-;	global nodoCrear
-;	global nodoBorrar
-;	global altaListaCrear
-;	global altaListaBorrar
-;	global altaListaImprimir
+	global nodoCrear
+	global nodoBorrar
+  global altaListaCrear
+	global altaListaBorrar
+	global altaListaImprimir
 
 ; AVANZADAS
 ;	global edadMedia
@@ -29,6 +29,8 @@
   extern malloc
   extern free
   extern fprintf
+  extern fopen
+  extern fclose
 
 ; /** DEFINES **/    >> SE RECOMIENDA COMPLETAR LOS DEFINES CON LOS VALORES CORRECTOS
 	%define NULL 	0
@@ -55,6 +57,8 @@ section .rodata
 
 section .data
   template: db '%s', 10, 9, '%s', 10, 9,'%d', 10, 0
+  modoAppend: db 'a', 0
+  vacia: db '<vacia>', 10, 0
 
 section .text
 
@@ -213,23 +217,147 @@ section .text
 
 	; nodo *nodoCrear( void *dato )
 	nodoCrear:
-		; COMPLETAR AQUI EL CODIGO
+    push rbp
+    mov rbp, rsp
+    push rbx
+    push r12                   ;; FIN INICIALIZACION
+    
+    mov rbx, rdi               ; rbx <- dato
+    mov rdi, NODO_SIZE
+    call malloc
+    mov qword [rax + OFFSET_SIGUIENTE], NULL
+    mov qword [rax + OFFSET_ANTERIOR], NULL
+    mov qword [rax + OFFSET_DATO], rbx
+    
+    pop r12
+    pop rbx
+    pop rbp
+    ret
+
 
 	; void nodoBorrar( nodo *n, tipoFuncionBorrarDato f )
 	nodoBorrar:
-		; COMPLETAR AQUI EL CODIGO
+    push rbp
+    mov rbp, rsp
+    push rbx
+    push r12
+    push r13
+    push r14                   ;; FIN INICIALIZACION
+
+    mov rbx, rdi               ; rbx <- n
+    mov r12, rsi               ; r12 <- f
+
+    mov rdi, [rbx + OFFSET_DATO]
+    call r12
+    mov rdi, rbx
+    call free
+
+    pop r14
+    pop r13
+    pop r12
+    pop rbx
+    pop rbp
+    ret
+
 
 	; altaLista *altaListaCrear( void )
 	altaListaCrear:
-		; COMPLETAR AQUI EL CODIGO
+    push rbp
+    mov rbp, rsp
+    push rbx
+    push r12                   ;; FIN INICIALIZACION
+
+    mov rdi, NODO_SIZE
+    call malloc
+    mov qword [rax + OFFSET_PRIMERO], NULL
+    mov qword [rax + OFFSET_ULTIMO], NULL
+    
+    pop r12
+    pop rbx
+    pop rbp
+    ret
+
 
 	; void altaListaBorrar( altaLista *l, tipoFuncionBorrarDato f )
 	altaListaBorrar:
-		; COMPLETAR AQUI EL CODIGO
+		push rbp
+    mov rbp, rsp
+    push rbx
+    push r12
+    push r13
+    push r14                   ;; FIN INICIALIZACION
+    
+    mov rbx, rdi               ; rbx <- l
+    mov r12, rsi               ; r12 <- f
+    mov r13, [rbx + OFFSET_PRIMERO] ; r13 <- nodoActual
+    mov r14, 0                      ; r14 <- nodoSiguiente
+
+  altaListaBorrar_loop:
+    cmp r13, 0                 ; nodoActual == NULL?
+    je altaListaBorrar_fin
+    mov r14, [r13 + OFFSET_SIGUIENTE] ; nodoSiguiente <- nodoActual->Siguiente
+    mov rdi, r13               
+    mov rsi, r12
+    call nodoBorrar            ; nodoBorrar(nodoActual, f)
+    mov r13, r14               ; nodoActual <- nodoSiguiente
+    jmp altaListaBorrar_loop
+
+  altaListaBorrar_fin:
+    mov rdi, rbx
+    call free                  ; free(l)
+    pop r14
+    pop r13
+    pop r12
+    pop rbx
+    pop rbp
+    ret
+
 
 	; void altaListaImprimir( altaLista *l, char *archivo, tipoFuncionImprimirDato f )
 	altaListaImprimir:
-		; COMPLETAR AQUI EL CODIGO
+		push rbp
+    mov rbp, rsp
+    push rbx
+    push r12
+    push r13
+    push r14                   ;; FIN INICIALIZACION
+    
+    mov rbx, rdi               ; rbx <- l
+    mov r12, rsi               ; r12 <- archivo
+    mov r13, rdx               ; r13 <- f
+    
+    mov rdi, r12
+    mov rsi, modoAppend
+    call fopen
+    mov r14, rax               ; r14 <- file
+
+    mov rbx, [rbx + OFFSET_PRIMERO] ; rbx <- l->primero  ~  rbx <- nodoActual
+
+    cmp rbx, NULL
+    je altaListaImprimir_vacia ; si es vacia, imprime <vacia>
+
+  altaListaImprimir_loop:
+    cmp rbx, NULL
+    je altaListaImprimir_fin
+    mov rdi, [rbx + OFFSET_DATO]
+    mov rsi, r14
+    call r13                   ; f(nodoActual->dato, file)
+    mov rbx, [rbx + OFFSET_SIGUIENTE] ; nodoActual <- nodoActual->siguiente
+    jmp altaListaImprimir_loop
+  altaListaImprimir_vacia:
+    mov rdi, r14
+    mov rsi, vacia
+    mov rax, 0
+    call fprintf
+  altaListaImprimir_fin:
+    mov rdi, r14
+    call fclose
+    pop r14
+    pop r13
+    pop r12
+    pop rbx
+    pop rbp
+    ret
 
 
 ;/** FUNCIONES AVANZADAS **/    >> PUEDEN CREAR LAS FUNCIONES AUXILIARES QUE CREAN CONVENIENTES

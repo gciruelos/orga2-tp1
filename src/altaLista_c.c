@@ -41,6 +41,7 @@ void estudianteImprimir( estudiante *e, FILE *file ){
 */
 
 /** Funciones de altaLista y nodo **/
+/*
 nodo *nodoCrear(void *dato){
   nodo * n = malloc(sizeof(nodo));
 
@@ -89,7 +90,7 @@ void altaListaImprimir(altaLista *l, char *archivo, tipoFuncionImprimirDato f){
   fclose(file);
 }
 
-
+*/
 
 
 /** Funciones Avanzadas **/
