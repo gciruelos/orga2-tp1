@@ -1,10 +1,10 @@
 
 ; ESTUDIANTE
-;	global estudianteCrear
-;	global estudianteBorrar
-;	global menorEstudiante
-;	global estudianteConFormato
-;	global estudianteImprimir
+	global estudianteCrear
+	global estudianteBorrar
+	global menorEstudiante
+	global estudianteConFormato
+	global estudianteImprimir
 	
 ; ALTALISTA y NODO
 ;	global nodoCrear
@@ -27,6 +27,8 @@
 	extern string_iguales
 	extern insertarAtras
   extern malloc
+  extern free
+  extern fprintf
 
 ; /** DEFINES **/    >> SE RECOMIENDA COMPLETAR LOS DEFINES CON LOS VALORES CORRECTOS
 	%define NULL 	0
@@ -52,7 +54,7 @@ section .rodata
 
 
 section .data
-
+  template: db '%s', 10, 9, '%s', 10, 9,'%d', 10, 0
 
 section .text
 
@@ -61,23 +63,149 @@ section .text
 
 	; estudiante *estudianteCrear( char *nombre, char *grupo, unsigned int edad );
 	estudianteCrear:
-		; COMPLETAR AQUI EL CODIGO
+    push rbp
+    mov rbp, rsp
+    push rbx
+    push r12
+    push r13
+    push r14                   ;; FIN INICIALIZACION
+    mov r12, rdi               ; r12 = nombre
+    mov r13, rsi               ; r13 = grupo 
+    mov r14, rdx               ; r14 = edad
+    mov rdi, ESTUDIANTE_SIZE
+    call malloc                ; malloc(sizeof(estudiante))
+    mov rbx, rax               ; rbx = puntero a estudiante
+    mov rdi, r12               ; rdi = nombre 
+    call string_copiar
+    mov qword [rbx + OFFSET_NOMBRE], rax ; e->nombre = string_copiar(nombre)
+    mov rdi, r13
+    call string_copiar
+    mov qword [rbx + OFFSET_GRUPO], rax ; e->grupo = string_copiar(grupo)
+    mov rdx, r14
+    mov dword [rbx + OFFSET_EDAD], edx ; e->edad = edad
+    mov rax, rbx
+    pop r14
+    pop r13
+    pop r12
+    pop rbx
+    pop rbp
+    ret
 
 	; void estudianteBorrar( estudiante *e );
 	estudianteBorrar:
-		; COMPLETAR AQUI EL CODIGO
+    push rbp
+    mov rbp, rsp
+    push rbx
+    push r12
+    push r13
+    push r14                   ;; FIN INICIALIZACION
+
+    mov rbx, rdi
+    mov rdi, [rbx + OFFSET_NOMBRE]
+    call free
+    mov rdi, [rbx + OFFSET_GRUPO]
+    call free
+    mov rdi, rbx
+    call free
+
+    pop r14
+    pop r13
+    pop r12
+    pop rbx
+    pop rbp
+    ret
+
 
 	; bool menorEstudiante( estudiante *e1, estudiante *e2 ){
 	menorEstudiante:
-		; COMPLETAR AQUI EL CODIGO
+    push rbp
+    mov rbp, rsp
+    push rbx
+    push r12
+    push r13
+    push r14                   ;; FIN INICIALIZACION
+    mov r12, rdi               ; r12 <- e1
+    mov r13, rsi               ; r13 <- e2
+    mov rdi, [r12 + OFFSET_NOMBRE]
+    mov rsi, [r13 + OFFSET_NOMBRE]
+    call string_menor
+    cmp rax, TRUE              ; si string_menor(e1->nombre, e2->nombre)
+    je menorEstudiante_true    ; return true
+    mov rdi, [r12 + OFFSET_NOMBRE]
+    mov rsi, [r13 + OFFSET_NOMBRE]
+    call string_iguales
+    cmp rax, FALSE             ; si !string_iguales(e1->nombre, e2->nombre)
+    je menorEstudiante_false   ; return false
+    mov ebx, [r12 + OFFSET_EDAD] ; ebx <- e1->edad 
+    cmp ebx, [r13 + OFFSET_EDAD] ; e1->edad <= e2->edad
+    jle menorEstudiante_true
+    jmp menorEstudiante_false
+  menorEstudiante_true:
+    mov rax, TRUE
+    jmp menorEstudiante_fin
+  menorEstudiante_false:
+    mov rax, FALSE
+  menorEstudiante_fin:
+    pop r14
+    pop r13
+    pop r12
+    pop rbx
+    pop rbp
+    ret
+
 
 	; void estudianteConFormato( estudiante *e, tipoFuncionModificarString f )
-	estudianteConFormato:
-		; COMPLETAR AQUI EL CODIGO
+	estudianteConFormato:	
+    push rbp
+    mov rbp, rsp
+    push rbx
+    push r12
+    push r13
+    push r14                   ;; FIN INICIALIZACION
+   
+    mov r12, rdi               ; r12 <- estudiante
+    mov rbx, rsi               ; rbx <- f
+
+    mov rdi, [r12 + OFFSET_NOMBRE]
+    call rbx                   ; f(e->nombre)
+    mov rdi, [r12 + OFFSET_GRUPO]
+    call rbx                   ; f(e->grupo)
+
+    pop r14
+    pop r13
+    pop r12
+    pop rbx
+    pop rbp
+    ret
+
 	
 	; void estudianteImprimir( estudiante *e, FILE *file )
 	estudianteImprimir:
-		; COMPLETAR AQUI EL CODIGO
+    push rbp
+    mov rbp, rsp
+    push rbx
+    push r12
+    push r13
+    push r14                   ;; FIN INICIALIZACION
+
+    mov rbx, rdi               ; rbx <- e
+    mov r12, rsi               ; r12 <- file
+
+    mov rdi, r12              
+    mov rsi, template
+    mov rdx, [rbx + OFFSET_NOMBRE]
+    mov rcx, [rbx + OFFSET_GRUPO]
+    mov r8d, [rbx + OFFSET_EDAD]
+    mov rax, 0
+    call fprintf               ; fprintf(file, temp, e->nombre, e->grupo, e->edad)
+
+    pop r14
+    pop r13
+    pop r12
+    pop rbx
+    pop rbp
+    ret
+
 
 
 ;/** FUNCIONES DE ALTALISTA Y NODO **/    >> PUEDEN CREAR LAS FUNCIONES AUXILIARES QUE CREAN CONVENIENTES

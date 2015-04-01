@@ -3,7 +3,7 @@
 
 
 /** Funciones de estudiante **/
-/*
+
 estudiante *estudianteCrear( char *nombre, char *grupo, unsigned int edad ){
   estudiante * e = malloc(sizeof(estudiante));
 
@@ -38,7 +38,7 @@ void estudianteConFormato( estudiante *e, tipoFuncionModificarString f ){
 void estudianteImprimir( estudiante *e, FILE *file ){
   fprintf(file, "%s\n\t%s\n\t%d\n", e->nombre, e->grupo, e->edad);
 }
-*/
+
 
 /** Funciones de altaLista y nodo **/
 nodo *nodoCrear(void *dato){
@@ -170,9 +170,8 @@ void filtrarAltaLista( altaLista *l, tipoFuncionCompararDato f, void *datoCmp ){
   }
 }
 
-
 /** Funciones auxiliares sugeridas **/
-/*
+
 unsigned char string_longitud(char *s){
   int i = 0, l = 0;
 
@@ -209,7 +208,7 @@ bool string_menor(char *s1, char *s2){
   else return false;
 }
 
-*/
+
 /** Funciones Auxiliares ya implementadas en C **/
 
 bool string_iguales( char *s1, char *s2 ){

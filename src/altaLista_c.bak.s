@@ -1,10 +1,10 @@
-	.file	"altaLista_c.c"
+	.file	"altaLista_c.bak.c"
 	.intel_syntax noprefix
 # GNU C (GCC) version 4.9.2 20150304 (prerelease) (x86_64-unknown-linux-gnu)
 #	compiled by GNU C version 4.9.2 20150304 (prerelease), GMP version 6.0.0, MPFR version 3.1.2-p11, MPC version 1.0.3
 # GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
-# options passed:  altaLista_c.c -masm=intel -mtune=generic -march=x86-64
-# -O3 -fverbose-asm
+# options passed:  altaLista_c.bak.c -masm=intel -mtune=generic
+# -march=x86-64 -O3 -fverbose-asm
 # options enabled:  -faggressive-loop-optimizations
 # -fasynchronous-unwind-tables -fauto-inc-dec -fbranch-count-reg
 # -fcaller-saves -fcombine-stack-adjustments -fcommon -fcompare-elim
