@@ -94,6 +94,7 @@ void altaListaImprimir(altaLista *l, char *archivo, tipoFuncionImprimirDato f){
 
 
 /** Funciones Avanzadas **/
+/*
 float edadMedia(altaLista *l){
   int suma = 0;
   int largo = 0;
@@ -107,7 +108,7 @@ float edadMedia(altaLista *l){
 
   return ((float) suma)/largo;
 }
-/*
+
 void insertarOrdenado(altaLista *l, void *dato, tipoFuncionCompararDato f){
   nodo *nodoActual = l->primero, *nodoAnterior;
   while(nodoActual != NULL && !f(dato, nodoActual->dato)){
@@ -135,15 +136,13 @@ void insertarOrdenado(altaLista *l, void *dato, tipoFuncionCompararDato f){
     }
   }
 }
-*/
+
 
 void filtrarAltaLista( altaLista *l, tipoFuncionCompararDato f, void *datoCmp ){
   nodo *nodoActual = l->primero, *nodoSiguiente, *nodoAnterior;
   while(nodoActual != NULL){
     nodoSiguiente = nodoActual->siguiente; 
-    nodoAnterior = nodoActual->anterior;
-    
-    
+    nodoAnterior = nodoActual->anterior; 
 
     if(!f(nodoActual->dato, datoCmp)){//tengo que borrarlo 
       if(nodoAnterior == NULL && nodoSiguiente == NULL){
@@ -170,7 +169,7 @@ void filtrarAltaLista( altaLista *l, tipoFuncionCompararDato f, void *datoCmp ){
     nodoActual = nodoSiguiente;
   }
 }
-
+*/
 
 /** Funciones auxiliares sugeridas **/
 /*

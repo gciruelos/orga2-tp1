@@ -14,9 +14,9 @@
 	global altaListaImprimir
 
 ; AVANZADAS
-;	global edadMedia
+	global edadMedia
 	global insertarOrdenado
-;	global filtrarAltaLista
+	global filtrarAltaLista
 
 ; AUXILIARES SUGERIDAS
   global string_longitud
@@ -365,7 +365,38 @@ section .text
 
 	; float edadMedia( altaLista *l )
 	edadMedia:
-		; COMPLETAR AQUI EL CODIGO
+		push rbp
+    mov rbp, rsp
+    push rbx
+    push r12
+    push r13
+    push r14                   ;; FIN INICIALIZACION
+    mov ecx, 0               ; ecx <- largo = 0
+    mov edx, 0               ; edx <- suma = 0
+    mov rbx, [rdi + OFFSET_PRIMERO] ; rbx <- nodoActual
+  edadMedia_loop:
+    cmp rbx, NULL
+    je edadMedia_fin
+    mov r14, [rbx + OFFSET_DATO] ; r14 <-nodoActual->dato
+    add edx, dword [r14 + OFFSET_EDAD] ; suma += (nodoActual->dato)->edad
+    add ecx, 1                 ; largo++
+    mov rbx, [rbx + OFFSET_SIGUIENTE] ; nodoActual <- nodoActual->siguiente
+    jmp edadMedia_loop
+  edadMedia_fin:
+    pxor xmm0, xmm0
+    pxor xmm1, xmm1
+    cvtsi2ss xmm0, edx
+    cvtsi2ss xmm1, ecx
+    divss xmm0, xmm1
+    pop r14
+    pop r13
+    pop r12
+    pop rbx
+    pop rbp
+    ret
+
+
+; COMPLETAR AQUI EL CODIGO
 
 	; void insertarOrdenado( altaLista *l, void *dato, tipoFuncionCompararDato f )
 	insertarOrdenado:		
@@ -385,12 +416,12 @@ section .text
     mov rbx, [r15 + OFFSET_PRIMERO] ; rbx <- nodoActual 
  
   insertarOrdenado_loop:
-    cmp rbx, 0
+    cmp rbx, NULL
     je insertarOrdenado_loop_fin
     mov rdi, r12
     mov rsi, [rbx + OFFSET_DATO]
     call r13                   ; f(dato, nodoActual->dato)
-    cmp rax, 0
+    cmp rax, FALSE
     jne insertarOrdenado_loop_fin
     mov rbx, [rbx + OFFSET_SIGUIENTE] ; nodoActual <- nodoActual->siguiente
     jmp insertarOrdenado_loop
@@ -434,7 +465,76 @@ section .text
 
 	; void filtrarAltaLista( altaLista *l, tipoFuncionCompararDato f, void *datoCmp )
 	filtrarAltaLista:
-		; COMPLETAR AQUI EL CODIGO
+	  push rbp
+    mov rbp, rsp
+    push rbx
+    push r12
+    push r13
+    push r14                   
+    push r15 
+    sub rsp, 8                 ;; FIN INICIALIZACION
+
+    mov rbx, rdi               ; rbx <- l
+    mov r12, rsi               ; r12 <- f
+    mov r13, [rbx + OFFSET_PRIMERO] ; r13 <- nodoActual
+    mov r14, NULL              ; r14 <- nodoSiguiente
+    mov r15, NULL              ; r15 <- nodoAnterior
+    mov [rsp], rdx             ; [rsp - 8] <-  datoCmp
+
+  filtrarAltaLista_loop:
+    cmp r13, NULL
+    je filtrarAltaLista_fin    ; si es NULL, listo
+    mov r14, [r13 + OFFSET_SIGUIENTE] ; nodoSiguiente <- nodoActual->siguiente 
+    mov r15, [r13 + OFFSET_ANTERIOR] ; nodoAnterior <- nodoActual->anterior
+    
+    mov rdi, [r13 + OFFSET_DATO]
+    mov rsi, [rsp]
+    call r12                   ; f(nodoActual->dato, datoCmp);
+    cmp rax, TRUE
+    jne filtrarAltaLista_borrar
+    jmp filtrarAltaLista_proxima_iteracion
+  
+  filtrarAltaLista_borrar:
+    cmp r15, NULL
+    je filtrarAltaLista_borrar_primero_o_unico
+    cmp r14, NULL
+    je filtrarAltaLista_borrar_ultimo ; no esta en el medio
+    mov [r15 + OFFSET_SIGUIENTE], r14 ; nodoAnterior->siguiente <- nodoSiguiente
+    mov [r14 + OFFSET_ANTERIOR], r15  ; nodoSiguiente->anterior <- nodoAnterior
+    jmp filtrarAltaLista_borrar_nodo
+  filtrarAltaLista_borrar_primero_o_unico:
+    cmp r14, NULL
+    je filtrarAltaLista_borrar_unico ; no es el primero
+    mov [rbx + OFFSET_PRIMERO], r14  ; l->primero <- nodoSiguiente
+    mov qword [r14 + OFFSET_ANTERIOR], NULL ; nodoSiguiente->anterior = NULL
+    jmp filtrarAltaLista_borrar_nodo
+  filtrarAltaLista_borrar_unico:
+    mov qword [rbx + OFFSET_PRIMERO], NULL 
+    mov qword [rbx + OFFSET_ULTIMO], NULL
+    jmp filtrarAltaLista_borrar_nodo 
+  filtrarAltaLista_borrar_ultimo:
+    mov [rbx + OFFSET_ULTIMO], r15 ; l->ultimo <- nodoAnterior
+    mov qword [r15 + OFFSET_SIGUIENTE], NULL ; nodoAnterior->siguiente = NULL
+    jmp filtrarAltaLista_borrar_nodo
+
+  filtrarAltaLista_borrar_nodo:
+    mov rdi, r13
+    mov rsi, estudianteBorrar
+    call nodoBorrar
+  filtrarAltaLista_proxima_iteracion:
+    mov r13, r14               ; nodoActual <- nodoSiguiente
+    jmp filtrarAltaLista_loop
+
+  filtrarAltaLista_fin:
+    add rsp, 8
+    pop r15
+    pop r14
+    pop r13
+    pop r12
+    pop rbx
+    pop rbp
+    ret
+
 
 
 

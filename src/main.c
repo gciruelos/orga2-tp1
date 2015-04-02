@@ -81,7 +81,7 @@ int main (void){
   altaListaImprimir(miAltaLista, "salida.txt", (tipoFuncionImprimirDato) estudianteImprimir);
   altaListaBorrar(miAltaLista, (tipoFuncionBorrarDato) estudianteBorrar);
 
-
+/*
   miAltaLista = altaListaCrear();
   estudiante *Leila = estudianteCrear( "leila", "entrania", 21 ) ;
   estudiante *Laura = estudianteCrear( "laura", "provoletta", 23 );
@@ -89,7 +89,7 @@ int main (void){
   filtrarAltaLista( miAltaLista, (tipoFuncionCompararDato)menorEstudiante, Laura );
   altaListaBorrar(miAltaLista, (tipoFuncionBorrarDato) estudianteBorrar);
   estudianteBorrar(Laura);
- /* 
+ */
 
   //FIGURA 4
   altaLista * l = altaListaCrear();
@@ -107,9 +107,7 @@ int main (void){
   imprimirDerecho(l);
   
   estudianteBorrar( Laura );
-  altaListaBorrar(l, (tipoFuncionBorrarDato) estudianteBorrar);
-  
- */ 
+  altaListaBorrar(l, (tipoFuncionBorrarDato) estudianteBorrar); 
   
   
   return 0;
