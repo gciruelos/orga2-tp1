@@ -5,12 +5,11 @@
 
 void imprimirDerecho(altaLista * l){
   nodo * nodoActual = l->primero;
-  printf("-----DEBUG-----\n");
+  printf("-----ESTUDIANTE_IMPRIMIR-----\n");
   while(nodoActual != NULL){
     estudianteImprimir(nodoActual->dato, stdout);
     nodoActual = nodoActual->siguiente;
   }
-  printf("---FIN----\n");
 }
 
 
@@ -19,7 +18,7 @@ void f( char* s ){s[0] = s[0];}
 void g( char *s ){ if( s[0] != 0 ) s[0] = 'X'; }
 
 int main (void){
-  //string_copiar, string_longitud, string_menor
+  // 1) string_copiar, string_longitud, string_menor
   char h1[] = "Paul Simon";
   char * h2 = string_copiar(h1);
   h1[2] = 'o';
@@ -29,17 +28,17 @@ int main (void){
   char x1[]="Agustina";
   char x2[]="Agustina";
   printf(string_menor(x1, x2)? "%s < %s\n" : "%s >= %s\n", x1, x2); 
-  //estudianteCrear
+  // estudianteCrear
   estudiante * miEstudiante1 = estudianteCrear(h2, "Simon & Garfunkel", 57);
   free(h2);
   estudiante * miEstudiante2 = estudianteCrear("Gonzalo Ciruelos", "Grupo 1", 20);
   printf( "Nombre: %s\nGrupo: %s\nEdad: %d\n", miEstudiante1->nombre, miEstudiante1->grupo, miEstudiante1->edad ); 
-  //menorEstudiante
+ // 3) menorEstudiante
   if( menorEstudiante( miEstudiante1, miEstudiante2 ) )
     printf( "TRUE\n" ); else printf( "FALSE\n" );
-  //estudianteImprimir
+  // 2) estudianteImprimir
   estudianteImprimir(miEstudiante2, stdout);
-  //estudianteConFormato
+  // 4)estudianteConFormato
   estudianteImprimir(miEstudiante2, stdout);
   estudianteConFormato(miEstudiante2, f);
   estudianteImprimir(miEstudiante2, stdout);
@@ -52,63 +51,68 @@ int main (void){
 
 
   miEstudiante1 = estudianteCrear("Paul Simon", "Simon & Garfunkel", 57);
-
-
-
-  //Crear un nodo y borrarlo
+  // 5) Crear un nodo y borrarlo
   nodo *miNodo = nodoCrear( miEstudiante1);
   nodoBorrar( miNodo, (tipoFuncionBorrarDato)estudianteBorrar );
 
 
-  //Crear una altaLista vacia, imprimirla y borrarla
+  // 6) Crear una altaLista vacia, imprimirla y borrarla
   altaLista *miAltaLista = altaListaCrear();
   altaListaImprimir( miAltaLista, "salida.txt", (tipoFuncionImprimirDato) estudianteImprimir);
   altaListaBorrar(miAltaLista, (tipoFuncionBorrarDato) estudianteBorrar);
 
-  //Crear una altaLista nueva, agregarle un estudiante, imprimirla y borrarla
-  miAltaLista = altaListaCrear();
-  insertarAtras(miAltaLista, estudianteCrear("leila", "entrania", 21));
-  insertarAtras(miAltaLista, estudianteCrear("Gonzalo", "miGrupo", 20));
-  insertarAtras(miAltaLista, estudianteCrear("viejo", "grupo2", 50));
-  altaListaImprimir(miAltaLista, "salida.txt", (tipoFuncionImprimirDato) estudianteImprimir);
-  printf("Promedio edad: %f\n", edadMedia(miAltaLista));
-  altaListaBorrar(miAltaLista, (tipoFuncionBorrarDato) estudianteBorrar);
+  // 7) Crear una altaLista nueva, agregarle un estudiante, imprimirla y borrarla
+  altaLista * miAltaLista7 = altaListaCrear();
+  insertarAtras(miAltaLista7, estudianteCrear("leila", "entrania", 21));
+  insertarAtras(miAltaLista7, estudianteCrear("Gonzalo", "miGrupo", 20));
+  insertarAtras(miAltaLista7, estudianteCrear("viejo", "grupo2", 50));
+  altaListaImprimir(miAltaLista7, "salida.txt", (tipoFuncionImprimirDato) estudianteImprimir);
+  printf("Promedio edad: %f\n", edadMedia(miAltaLista7));
+  altaListaBorrar(miAltaLista7, (tipoFuncionBorrarDato) estudianteBorrar);
 
-  //Insertar Ordenado
-  miAltaLista = altaListaCrear();
-  insertarAtras(miAltaLista, estudianteCrear("Gonzalo", "miGrupo", 20));
-  insertarOrdenado(miAltaLista, estudianteCrear("Gonzalo", "miGrupo", 19),  (tipoFuncionCompararDato) menorEstudiante);
-  altaListaImprimir(miAltaLista, "salida.txt", (tipoFuncionImprimirDato) estudianteImprimir);
-  altaListaBorrar(miAltaLista, (tipoFuncionBorrarDato) estudianteBorrar);
+  // 8) Calcular la edad media de los estudiantes 
+  altaLista * miAltaLista8 = altaListaCrear();
+  insertarAtras( miAltaLista8, estudianteCrear( "leila", "entrania", 21 ) );
+  printf( "edadMedia = %2.5f\n", edadMedia( miAltaLista8) );
+  insertarAtras( miAltaLista8, estudianteCrear( "leila2", "grupo2", 20 ) );
+  insertarAtras( miAltaLista8, estudianteCrear( "leila3", "adfasdf",  19 ) );
+  printf( "edadMedia = %2.5f\n", edadMedia( miAltaLista8 ) );
+  altaListaBorrar(miAltaLista8, (tipoFuncionBorrarDato) estudianteBorrar);
+  
 
-/*
-  miAltaLista = altaListaCrear();
-  estudiante *Leila = estudianteCrear( "leila", "entrania", 21 ) ;
-  estudiante *Laura = estudianteCrear( "laura", "provoletta", 23 );
-  insertarOrdenado( miAltaLista, Leila, (tipoFuncionCompararDato)menorEstudiante );
-  filtrarAltaLista( miAltaLista, (tipoFuncionCompararDato)menorEstudiante, Laura );
-  altaListaBorrar(miAltaLista, (tipoFuncionBorrarDato) estudianteBorrar);
-  estudianteBorrar(Laura);
- */
 
-  //FIGURA 4
+  // 9) Insertar Ordenado
+  altaLista * miAltaLista9 = altaListaCrear();
+  insertarAtras(miAltaLista9, estudianteCrear("Gonzalo", "miGrupo", 20));
+  insertarOrdenado(miAltaLista9, estudianteCrear("Gonzalo", "miGrupo", 19),  (tipoFuncionCompararDato) menorEstudiante);
+  altaListaImprimir(miAltaLista9, "salida.txt", (tipoFuncionImprimirDato) estudianteImprimir);
+  altaListaBorrar(miAltaLista9, (tipoFuncionBorrarDato) estudianteBorrar);
+
+
+
+  // 10) Corroborar el invariante de la altaLista (FIGURA 4)
   altaLista * l = altaListaCrear();
   insertarAtras(l, estudianteCrear("Jose", "Vacio", 20));
   insertarAtras(l, estudianteCrear("Paula", "Asado", 21));
   estudiante *Leila = estudianteCrear( "Leila", "Entrania", 21 );
   insertarOrdenado( l, Leila, (tipoFuncionCompararDato)menorEstudiante );
   estudiante *Laura = estudianteCrear( "Laura", "Provoletta", 23 );
- 
-
   imprimirDerecho(l);
-
-  filtrarAltaLista( l, (tipoFuncionCompararDato)menorEstudiante, Laura );
-  
+  filtrarAltaLista( l, (tipoFuncionCompararDato)menorEstudiante, Laura ); 
   imprimirDerecho(l);
-  
   estudianteBorrar( Laura );
   altaListaBorrar(l, (tipoFuncionBorrarDato) estudianteBorrar); 
-  
+ 
+  // 11) filtrarAltaLista
+  altaLista * miAltaLista11 = altaListaCrear();
+  estudiante *Leila2 = estudianteCrear( "leila", "entrania", 21 ) ;
+  estudiante *Laura2 = estudianteCrear( "laura", "provoletta", 23 );
+  insertarOrdenado( miAltaLista11, Leila2, (tipoFuncionCompararDato)menorEstudiante );
+  filtrarAltaLista( miAltaLista11, (tipoFuncionCompararDato)menorEstudiante, Laura2 );
+  imprimirDerecho(miAltaLista11);
+  altaListaBorrar(miAltaLista11, (tipoFuncionBorrarDato) estudianteBorrar);
+  estudianteBorrar(Laura2);
+ 
   
   return 0;
 }

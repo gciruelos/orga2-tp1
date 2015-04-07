@@ -1,0 +1,16 @@
+<vacia>
+leila
+	entrania
+	21
+Gonzalo
+	miGrupo
+	20
+viejo
+	grupo2
+	50
+Gonzalo
+	miGrupo
+	19
+Gonzalo
+	miGrupo
+	20
