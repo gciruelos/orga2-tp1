@@ -100,9 +100,7 @@ section .text
     push rbp
     mov rbp, rsp
     push rbx
-    push r12
-    push r13
-    push r14                   ;; FIN INICIALIZACION
+    push r12                   ;; FIN INICIALIZACION
 
     mov rbx, rdi
     mov rdi, [rbx + OFFSET_NOMBRE]
@@ -112,8 +110,6 @@ section .text
     mov rdi, rbx
     call free
 
-    pop r14
-    pop r13
     pop r12
     pop rbx
     pop rbp
@@ -127,7 +123,7 @@ section .text
     push rbx
     push r12
     push r13
-    push r14                   ;; FIN INICIALIZACION
+    sub rsp, 8                 ;; FIN INICIALIZACION
     mov r12, rdi               ; r12 <- e1
     mov r13, rsi               ; r13 <- e2
     mov rdi, [r12 + OFFSET_NOMBRE]
@@ -150,7 +146,7 @@ section .text
   menorEstudiante_false:
     mov rax, FALSE
   menorEstudiante_fin:
-    pop r14
+    add rsp, 8
     pop r13
     pop r12
     pop rbx
@@ -163,9 +159,7 @@ section .text
     push rbp
     mov rbp, rsp
     push rbx
-    push r12
-    push r13
-    push r14                   ;; FIN INICIALIZACION
+    push r12                   ;; FIN INICIALIZACION
    
     mov r12, rdi               ; r12 <- estudiante
     mov rbx, rsi               ; rbx <- f
@@ -175,8 +169,6 @@ section .text
     mov rdi, [r12 + OFFSET_GRUPO]
     call rbx                   ; f(e->grupo)
 
-    pop r14
-    pop r13
     pop r12
     pop rbx
     pop rbp
@@ -188,9 +180,7 @@ section .text
     push rbp
     mov rbp, rsp
     push rbx
-    push r12
-    push r13
-    push r14                   ;; FIN INICIALIZACION
+    push r12                   ;; FIN INICIALIZACION
 
     mov rbx, rdi               ; rbx <- e
     mov r12, rsi               ; r12 <- file
@@ -203,8 +193,6 @@ section .text
     mov rax, 0
     call fprintf               ; fprintf(file, temp, e->nombre, e->grupo, e->edad)
 
-    pop r14
-    pop r13
     pop r12
     pop rbx
     pop rbp
@@ -220,7 +208,7 @@ section .text
     push rbp
     mov rbp, rsp
     push rbx
-    push r12                   ;; FIN INICIALIZACION
+    sub rsp, 8                   ;; FIN INICIALIZACION
     
     mov rbx, rdi               ; rbx <- dato
     mov rdi, NODO_SIZE
@@ -229,7 +217,7 @@ section .text
     mov qword [rax + OFFSET_ANTERIOR], NULL
     mov qword [rax + OFFSET_DATO], rbx
     
-    pop r12
+    add rsp, 8
     pop rbx
     pop rbp
     ret
@@ -240,9 +228,7 @@ section .text
     push rbp
     mov rbp, rsp
     push rbx
-    push r12
-    push r13
-    push r14                   ;; FIN INICIALIZACION
+    push r12                   ;; FIN INICIALIZACION
 
     mov rbx, rdi               ; rbx <- n
     mov r12, rsi               ; r12 <- f
@@ -252,8 +238,6 @@ section .text
     mov rdi, rbx
     call free
 
-    pop r14
-    pop r13
     pop r12
     pop rbx
     pop rbp
@@ -263,17 +247,13 @@ section .text
 	; altaLista *altaListaCrear( void )
 	altaListaCrear:
     push rbp
-    mov rbp, rsp
-    push rbx
-    push r12                   ;; FIN INICIALIZACION
+    mov rbp, rsp               ;; FIN INICIALIZACION
 
     mov rdi, NODO_SIZE
     call malloc
     mov qword [rax + OFFSET_PRIMERO], NULL
     mov qword [rax + OFFSET_ULTIMO], NULL
     
-    pop r12
-    pop rbx
     pop rbp
     ret
 
@@ -567,9 +547,7 @@ section .text
     push rbp
     mov rbp, rsp
     push rbx
-    push r12
-    push r13
-    push r14                   ;; FIN INICIALIZACION
+    push r12                   ;; FIN INICIALIZACION
     call string_longitud       ; s esta en rdi
     mov r12, rdi               ; r12 <- s
     xor rdi, rdi
@@ -586,8 +564,7 @@ section .text
     jmp string_copiar_loop
   string_copiar_fin:
     mov byte [rax + rcx], bl   ; *(p+i) <- s[i] = '\0'
-    pop r14
-    pop r13
+    
     pop r12
     pop rbx
     pop rbp
@@ -598,9 +575,7 @@ section .text
     push rbp
     mov rbp, rsp
     push rbx
-    push r12
-    push r13
-    push r14                   ;; FIN INICIALIZACION
+    push r12                   ;; FIN INICIALIZACION
     xor rax, rax
     call string_iguales        ; string_iguales(s1, s2)
     cmp byte rax, TRUE         ; if TRUE, listo
@@ -621,8 +596,6 @@ section .text
   string_menor_true:
     mov rax, TRUE
   string_menor_fin:
-    pop r14
-    pop r13
     pop r12
     pop rbx
     pop rbp
